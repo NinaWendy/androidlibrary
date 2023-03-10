@@ -18,8 +18,14 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "androidlibrary_lib/build.gradle" }}
       - run:
-          name: Run Tests
+          name: Run Lint Check
           command: ./gradlew lint test
+      - run:
+          name: Run Unit Tests
+          command: ./gradlew testDebug
+      - run:
+          name: Run Instrumentation Tests
+          command: ./gradlew connectedAndroidTest
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
           path: androidlibrary_lib/build/reports
           destination: reports
