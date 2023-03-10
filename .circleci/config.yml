@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     working_directory: ~/repo
@@ -17,6 +17,10 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "androidlibrary_lib/build.gradle" }}
+      # build project
+      - run: 
+          name: Clean assemble
+          command: ./gradlew clean assemble
       - run:
           name: Run Lint Check
           command: ./gradlew lint test
@@ -31,6 +35,11 @@ jobs:
           destination: reports
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: androidlibrary_lib/build/test-results
+
+workflows:
+  build:
+    jobs:
+      - build
 #      - run:
 #          name: Clean assemble
 #          command: ./gradlew clean assemble
