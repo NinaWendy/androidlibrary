@@ -16,7 +16,8 @@ jobs:
           command: ./gradlew androidDependencies
       - run:
           name: Download Maven Dependencies
-          command: mvn dependency:go-offline
+          command: sudo apt-get update && sudo apt-get install -y maven
+
       - save_cache:
           paths: 
             - ~/.gradle
@@ -36,7 +37,8 @@ jobs:
       - run:
           name: Build and package with Maven
           command: |
-            mvn package -B package --file pom.xml
+            cd ..
+            mvn clean package
       - run:
           name: Publish artifact to GitHub Packages
           command: |
