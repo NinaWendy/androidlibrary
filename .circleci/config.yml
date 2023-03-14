@@ -17,9 +17,7 @@ jobs:
       - save_cache:
           paths: 
             - ~/.gradle
-            - ~/.m2
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "androidlibrary_lib/build.gradle" }}
-               jars-{{ checksum "pom.xml" }}
       # build project
       - run: 
           name: Clean assemble
@@ -35,12 +33,11 @@ jobs:
       - run:
           name: Build and package with Maven
           command: |
-            mvn package -DskipTests=true
+            mvn package -B package --file pom.xml
       - run:
           name: Publish artifact to GitHub Packages
           command: |
             mvn deploy \
-              -DskipTests=true \
               -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/NinaWendy/androidlibrary \
               -DrepositoryId=github \
               -Dgithub.site=https://maven.pkg.github.com \
