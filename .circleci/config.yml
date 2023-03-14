@@ -14,6 +14,9 @@ jobs:
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
+      - run:
+          name: Download Maven Dependencies
+          command: mvn dependency:go-offline
       - save_cache:
           paths: 
             - ~/.gradle
