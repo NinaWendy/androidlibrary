@@ -6,6 +6,7 @@ jobs:
       - image: circleci/android:api-28
     environment:
       JVM_OPTS: -Xmx4096m
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
     steps:
       - checkout
       - restore_cache:
@@ -29,11 +30,22 @@ jobs:
           destination: reports
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: androidlibrary_lib/build/test-results
-
+      - run:
+          name: Build and package with Maven
+          command: |
+            mvn package -DskipTests=true
+      - run:
+          name: Publish artifact to GitHub Packages
+          command: |
+            mvn deploy \
+              -DskipTests=true \
+              -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/NinaWendy/androidlibrary \
+              -DrepositoryId=github \
+              -Dgithub.site=https://maven.pkg.github.com \
+              -Dgithub.owner=NinaWendy \
+              -Dgithub.repo=androidlibrary \
+              -Dgithub.token=${GITHUB_TOKEN}
 workflows:
   build:
     jobs:
       - build
-#      - run:
-#          name: Clean assemble
-#          command: ./gradlew clean assemble
