@@ -39,7 +39,7 @@ jobs:
       - run:
           name: Build and package with Maven
           command: |
-            cd ~
+            cd /home/circleci/androidlibrary
             mvn -B package --file pom.xml
       - run:
           name: Publish artifact to GitHub Packages
