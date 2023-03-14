@@ -15,9 +15,11 @@ jobs:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
-          paths:
+          paths: 
             - ~/.gradle
+            - ~/.m2
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "androidlibrary_lib/build.gradle" }}
+               jars-{{ checksum "pom.xml" }}
       # build project
       - run: 
           name: Clean assemble
