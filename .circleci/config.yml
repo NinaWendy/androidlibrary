@@ -40,7 +40,7 @@ jobs:
           name: Build and package with Maven
           command: |
             cd ..
-            mvn clean package
+            mvn -B package --file pom.xml
       - run:
           name: Publish artifact to GitHub Packages
           command: |
