@@ -6,7 +6,7 @@ jobs:
       - image: circleci/android:api-28
     environment:
       JVM_OPTS: -Xmx4096m
-      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - checkout
       - restore_cache:
@@ -42,7 +42,7 @@ jobs:
       - run:
           name: Publish artifact to GitHub Packages
           command:
-             mvn clean deploy -s $HOME/androidlibrary/.m2/settings.xml
+             mvn --batch-mode deploy
             
 workflows:
   build:
