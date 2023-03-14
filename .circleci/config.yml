@@ -41,14 +41,9 @@ jobs:
           command: mvn -B clean package --file pom.xml
       - run:
           name: Publish artifact to GitHub Packages
-          command: |
-            mvn deploy \
-              -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/NinaWendy/androidlibrary \
-              -DrepositoryId=github \
-              -Dgithub.site=https://maven.pkg.github.com \
-              -Dgithub.owner=NinaWendy \
-              -Dgithub.repo=androidlibrary \
-              -Dgithub.token=${GITHUB_TOKEN}
+          command:
+             mvn deploy -s $HOME/.m2/settings.xml
+            
 workflows:
   build:
     jobs:
