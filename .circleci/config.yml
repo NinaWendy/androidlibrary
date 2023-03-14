@@ -42,7 +42,7 @@ jobs:
       - run:
           name: Publish artifact to GitHub Packages
           command:
-             mvn deploy -s $HOME/androidlibrary/settings.xml
+             mvn clean deploy -s $HOME/androidlibrary/.m2/settings.xml
             
 workflows:
   build:
