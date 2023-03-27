@@ -46,7 +46,8 @@ jobs:
       - run:
           name: Build and package with Maven
           command: mvn -B clean package --file pom.xml
-      # - run:
+      # Commented out due to metadata error
+      #  - run:
       #     name: Publish artifact to GitHub Packages
       #     command:
       #        mvn --batch-mode deploy
@@ -57,7 +58,7 @@ jobs:
     steps:
       - checkout
       - android/restore-gradle-cache
-      - run: ./gradlew lintDebug
+      - run: ./gradlew lint
       - android/save-gradle-cache
   unit_test:
     executor:
@@ -66,7 +67,7 @@ jobs:
     steps:
       - checkout
       - android/restore-gradle-cache
-      - run: ./gradlew testDebugUnitTest
+      - run: ./gradlew test
       - android/save-gradle-cache
       - store_test_results:
           path: ./app/build/test-results/testDebugUnitTest
