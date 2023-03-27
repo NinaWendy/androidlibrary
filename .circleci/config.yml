@@ -29,8 +29,11 @@ jobs:
           name: Clean assemble
           command: ./gradlew clean assemble
       - run:
+          name: Run Tests
+          command: ./gradlew test
+      - run:
           name: Run Lint Check
-          command: ./gradlew lint test
+          command: ./gradlew lint
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
           path: androidlibrary_lib/build/reports
           destination: reports
