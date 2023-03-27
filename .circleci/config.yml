@@ -1,4 +1,8 @@
 version: 2.1
+
+orbs:
+  android: circleci/android@2.2.0
+  
 jobs:
   build:
     working_directory: ~/androidlibrary
@@ -46,8 +50,43 @@ jobs:
           name: Publish artifact to GitHub Packages
           command:
              mvn --batch-mode deploy
-            
+  lint:
+    executor:
+      name: android/android-docker
+      resource-class: xlarge
+      tag: 2023.3.27
+    steps:
+      - checkout
+      - android/restore-gradle-cache
+      - run: ./gradlew lintDebug
+      - android/save-gradle-cache
+  unit_test:
+    executor:
+      name: android/android-docker
+      resource-class: xlarge
+      tag: 2023.3.27
+    steps:
+      - checkout
+      - android/restore-gradle-cache
+      - run: ./gradlew testDebugUnitTest
+      - android/save-gradle-cache
+      - store_test_results:
+          path: ./app/build/test-results/testDebugUnitTest
+  integration_test:
+    executor:
+      name: android/android-machine
+      resource-class: xlarge
+      tag: 2022.12.1
+    steps:
+      - checkout
+      - android/start-emulator-and-run-tests
+      - store_test_results:
+          path: ./app/build/outputs/androidTest-results/connected     
 workflows:
   build:
     jobs:
       - build
+      - lint
+      - unit_test
+      - integration_test
+      
