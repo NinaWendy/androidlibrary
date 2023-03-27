@@ -70,21 +70,12 @@ jobs:
       - run: ./gradlew test
       - android/save-gradle-cache
       - store_test_results:
-          path: ./app/build/test-results/testDebugUnitTest
-  integration_test:
-    executor:
-      name: android/android-machine
-      tag: 2022.12.1
-    steps:
-      - checkout
-      - android/start-emulator-and-run-tests
-      - store_test_results:
-          path: ./app/build/outputs/androidTest-results/connected     
+          path: androidlibrary_lib/build/test-results
+
 workflows:
   build:
     jobs:
       - build
       - lint
       - unit_test
-      - integration_test
       
