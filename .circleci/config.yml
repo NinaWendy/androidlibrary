@@ -46,14 +46,14 @@ jobs:
       - run:
           name: Build and package with Maven
           command: mvn -B clean package --file pom.xml
-      - run:
-          name: Publish artifact to GitHub Packages
-          command:
-             mvn --batch-mode deploy
+      # - run:
+      #     name: Publish artifact to GitHub Packages
+      #     command:
+      #        mvn --batch-mode deploy
   lint:
     executor:
       name: android/android-docker
-      resource-class: xlarge
+      resource-class: small
       tag: 2023.3.27
     steps:
       - checkout
@@ -63,7 +63,7 @@ jobs:
   unit_test:
     executor:
       name: android/android-docker
-      resource-class: xlarge
+      resource-class: small
       tag: 2023.3.27
     steps:
       - checkout
@@ -75,7 +75,6 @@ jobs:
   integration_test:
     executor:
       name: android/android-machine
-      resource-class: xlarge
       tag: 2022.12.1
     steps:
       - checkout
