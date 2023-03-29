@@ -1,0 +1,81 @@
+version: 2.1
+
+orbs:
+  android: circleci/android@2.2.0
+  
+jobs:
+  build:
+    working_directory: ~/androidlibrary
+    docker:
+      - image: circleci/android:api-28
+    environment:
+      JVM_OPTS: -Xmx4096m
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "androidlibrary_lib/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - run:
+          name: Download Maven Dependencies
+          command: |
+            sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B53DC80D13EDEF05
+            sudo apt-get update && sudo apt-get install -y maven
+
+      - save_cache:
+          paths: 
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "androidlibrary_lib/build.gradle" }}
+      # build project
+      - run: 
+          name: Clean assemble
+          command: ./gradlew clean assemble
+      - run:
+          name: Run Tests
+          command: ./gradlew test
+      - run:
+          name: Run Lint Check
+          command: ./gradlew lint
+      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
+          path: androidlibrary_lib/build/reports
+          destination: reports
+      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: androidlibrary_lib/build/test-results
+      - run:
+          name: Build and package with Maven
+          command: mvn -B clean package --file pom.xml
+      # Commented out due to metadata error
+      #  - run:
+      #     name: Publish artifact to GitHub Packages
+      #     command:
+      #        mvn --batch-mode deploy
+  lint:
+    executor:
+      name: android/android-docker
+      tag: 2022.09.1
+    steps:
+      - checkout
+      - android/restore-gradle-cache
+      - run: ./gradlew lint
+      - android/save-gradle-cache
+  unit_test:
+    executor:
+      name: android/android-docker
+      tag: 2022.12.1
+    steps:
+      - checkout
+      - android/restore-gradle-cache
+      - run: ./gradlew test
+      - android/save-gradle-cache
+      - store_test_results:
+          path: androidlibrary_lib/build/test-results
+
+workflows:
+  build:
+    jobs:
+      - build
+      - lint
+      - unit_test
+      
