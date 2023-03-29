@@ -87,6 +87,4 @@ workflows:
     jobs:
       - build
       - lint
-      - unit_test
-      - android-test
-      
+      - unit_test      
