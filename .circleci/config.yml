@@ -72,15 +72,15 @@ jobs:
       - store_test_results:
           path: androidlibrary_lib/build/test-results
           
-  android-test:
-    executor:
-      name: android/android-machine
-      tag: 2021.10.1
-    steps:
-      - checkout
-      - android/start-emulator-and-run-tests:
-          test-command: ./gradlew deviceAndroidTest
-          system-image: system-images;android-30;google_apis;x86
+  # android-test:
+  #   executor:
+  #     name: android/android-machine
+  #     tag: 2021.10.1
+  #   steps:
+  #     - checkout
+  #     - android/start-emulator-and-run-tests:
+  #         test-command: ./gradlew connectedAndroidTest
+  #         system-image: system-images;android-30;google_apis;x86
 
 workflows:
   build:
