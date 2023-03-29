@@ -2,7 +2,6 @@ package org.opendatakit.fragment;
 
 import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import org.opendatakit.logging.WebLogger;
@@ -191,6 +190,10 @@ public class AlertNProgessMsgFragmentMger {
       }
      return false;
    }
+
+    public DialogState getDialogState() {
+        return mDialogState;
+    }
 
    public void clearDialogsAndRetainCurrentState(FragmentManager fragmentManager) {
       if (fragmentManager == null) {
