@@ -71,6 +71,17 @@ jobs:
       - android/save-gradle-cache
       - store_test_results:
           path: androidlibrary_lib/build/test-results
+          
+  android-test:
+    executor:
+      name: android/android-machine
+      resource-class: xlarge
+      tag: 2021.10.1
+    steps:
+      - checkout
+      - android/start-emulator-and-run-tests:
+          test-command: ./gradlew connectedAndroidTest
+          system-image: system-images;android-30;google_apis;x86
 
 workflows:
   build:
@@ -78,4 +89,5 @@ workflows:
       - build
       - lint
       - unit_test
+      - android-test
       
