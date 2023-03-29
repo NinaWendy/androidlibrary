@@ -79,7 +79,7 @@ jobs:
     steps:
       - checkout
       - android/start-emulator-and-run-tests:
-          test-command: ./gradlew connectedAndroidTest
+          test-command: ./gradlew deviceAndroidTest
           system-image: system-images;android-30;google_apis;x86
 
 workflows:
