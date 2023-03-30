@@ -60,6 +60,7 @@ jobs:
       - android/restore-gradle-cache
       - run: ./gradlew lint
       - android/save-gradle-cache
+      
   unit_test:
     executor:
       name: android/android-docker
